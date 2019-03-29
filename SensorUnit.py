@@ -135,11 +135,6 @@ def main():
         '''calculate velocity change and displacement'''
         total_time = starttime - endtime
         
-        json_object = BasicSensorInformation(external_temp, pressure, accel_real,orient_deg, starttime,endtime)
-
-        with open("TestJson.json", 'w') as fp:
-            json.dump(json_object.__dict__, fp)
-        flag = False
         '''if motion is detected we output distance moved'''
         if abs(accel_procc[0]) > 0.03 or abs(accel_procc[1]) > 0.03 or abs(accel_procc[2]) > 0.03 :      
             print(("acceleration x = {0},y={1},z={2}, degrees to north = {3},{4}"
