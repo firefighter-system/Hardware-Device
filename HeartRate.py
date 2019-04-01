@@ -23,7 +23,7 @@ def getBPMLoop():
         lastTime = int(time.time()*1000)
         
         while True:
-            Signal = adc.read_adc(0, 2/3, 2400);
+            Signal = adc.read_adc(0,2/3,128);
             currentTime = int(time.time()*1000)
             
             sampleCounter += currentTime - lastTime
@@ -37,11 +37,13 @@ def getBPMLoop():
 
             if Signal > thresh and Signal > P:
                 P = Signal
-
+                
+            print(Signal)
+            
             # signal surges up in value every time there is a pulse
             if N > 250:                                 # avoid high frequency noise
                 if Signal > thresh and Pulse == False and N > (IBI/5.0)*3:       
-                    print("hjappening")
+                    
                     Pulse = True                        # set the Pulse flag when we think there is a pulse
                     IBI = sampleCounter - lastBeatTime  # measure time between beats in mS
                     lastBeatTime = sampleCounter        # keep track of time for next pulse
