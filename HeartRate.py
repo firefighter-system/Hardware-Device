@@ -1,12 +1,35 @@
-import Adafruit_ADS1x15
+import adafruit_ads1x15.ads1015 as ADS
 import time
-def main():
-    getBPMLoop()
+import board
+import busio
+import threading
+from adafruit_ads1x15.analog_in import AnalogIn
 
-        
-def getBPMLoop():
+def main():
     
-        adc = Adafruit_ADS1x15.ADS1015()
+    sensor = HeartRateSensor()
+    sensor.startAsyncBPM()
+    
+    while True:
+        
+        
+        time.sleep(0.1)
+
+class HeartRateSensor:
+    
+    def __init__(self, channel=0):
+        self.i2c = busio.I2C(board.SCL, board.SDA)
+        
+        self.ads = ADS.ADS1015(self.i2c)
+        self.ads.gain = 1
+        self.ads.data_rate = 128
+        self.chan = AnalogIn(self.ads, ADS.P0)
+        
+        self.BPM = 0
+        
+        
+    def getBPMLoop(self):
+    
         # init variables
         rate = [0] * 10         # array to hold last 10 IBI values
         sampleCounter = 0       # used to determine pulse timing
@@ -18,12 +41,15 @@ def getBPMLoop():
         firstBeat = True        # used to seed rate array so we startup with reasonable BPM
         secondBeat = False      # used to seed rate array so we startup with reasonable BPM
 
-        IBI = 600               # int that holds the time interval between beats! Must be seeded!
+        IBI = 100               # int that holds the time interval between beats! Must be seeded!
         Pulse = False           # "True" when User's live heartbeat is detected. "False" when not a "live beat". 
         lastTime = int(time.time()*1000)
         
         while True:
-            Signal = adc.read_adc(0,2/3,128);
+            
+
+            Signal = 4*self.chan.value
+            
             currentTime = int(time.time()*1000)
             
             sampleCounter += currentTime - lastTime
@@ -38,11 +64,12 @@ def getBPMLoop():
             if Signal > thresh and Signal > P:
                 P = Signal
                 
-            print(Signal)
             
             # signal surges up in value every time there is a pulse
-            if N > 250:                                 # avoid high frequency noise
+            if N > 250:
+                # avoid high frequency noise
                 if Signal > thresh and Pulse == False and N > (IBI/5.0)*3:       
+                    
                     
                     Pulse = True                        # set the Pulse flag when we think there is a pulse
                     IBI = sampleCounter - lastBeatTime  # measure time between beats in mS
@@ -64,10 +91,11 @@ def getBPMLoop():
                     runningTotal = sum(rate)            # add upp oldest IBI values
 
                     runningTotal /= len(rate)           # average the IBI values 
-                    BPM = 60000/runningTotal
-                    print(BPM)# how many beats can fit into a minute? that's BPM!
+                    self.BPM = 60000/runningTotal
+                    print(self.BPM)
+                    # how many beats can fit into a minute? that's BPM!
 
-            if Signal < thresh and Pulse == True:       # when the values are going down, the beat is over
+            if Signal > thresh and Pulse == True:       # when the values are going down, the beat is over
                 Pulse = False                           # reset the Pulse flag so we can do it again
                 amp = P - T                             # get amplitude of the pulse wave
                 thresh = amp/2 + T                      # set thresh at 50% of the amplitude
@@ -81,11 +109,20 @@ def getBPMLoop():
                 lastBeatTime = sampleCounter            # bring the lastBeatTime up to date        
                 firstBeat = True                        # set these to avoid noise
                 secondBeat = False                      # when we get the heartbeat back
-                BPM = 0
+                self.BPM = 0
 
-            time.sleep(0.005)
+            time.sleep(0.05)
 
-
+    def startAsyncBPM(self):
+        self.thread = threading.Thread(target=self.getBPMLoop)
+        self.thread.stopped = False
+        self.thread.start()
+        return
+    
+    def stopAsyncBPM(self):
+        self.thread.stopped = true
+        self.BPM=0
+        return
 
 
 if __name__ == "__main__":

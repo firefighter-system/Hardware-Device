@@ -16,6 +16,10 @@ while True:
               "storageBucket": "firefightingmonitoringsystem.appspot.com"
              }
     fireBase = pyrebase.initialize_app(config)
-    .FirebaseApplication('https://firefightingmonitoringsystem.firebaseio.com/') #HOST ID from FIREBASE 'https://firefightingmonitoringsystem.firebaseio.com/'
-    result = firebase.post('firefightingmonitoringsystem', {'temp':str(temperature), 'humidity':str(humidity)}) #Project Name from FIREBASE 'firefightingmonitoringsystem'
+    
+    data = {"temperature": temperature,"Humidity": humidity}
+    
+    db = fireBase.database()
+    
+    result = db.push(data)    
     print(result)

@@ -21,7 +21,8 @@ class BasicSensorInformation:
 
 def calculateGCoeff(sensehat):
     g = []
-    for i in range(1024):
+    samples = 100
+    for i in range(samples):
 
         accel_raw = sensehat.get_accelerometer_raw()
         orient_rad = sensehat.get_orientation_radians()
@@ -36,10 +37,10 @@ def calculateGCoeff(sensehat):
         g.append(gVal) 
 
     sum = 0.0
-    for j in range(1024):
+    for j in range(samples):
         sum+=g[j]
     
-    return sum/1024.0
+    return sum/100.0
 
 def removeGravity(accel_raw, eulertransmatrix,g):
         
@@ -128,8 +129,6 @@ def main():
         
         accel_procc = removeGravity(accel_raw,eulermatrixtrans, gCoeff)
         
-        accel_real = matrixMultiply3x9(accel_procc, eulermatrixtrans)
-        
         endtime = time.time()
         
         '''calculate velocity change and displacement'''
@@ -138,7 +137,7 @@ def main():
         '''if motion is detected we output distance moved'''
         if abs(accel_procc[0]) > 0.03 or abs(accel_procc[1]) > 0.03 or abs(accel_procc[2]) > 0.03 :      
             print(("acceleration x = {0},y={1},z={2}, degrees to north = {3},{4}"
-               .format(accel_real['x'] ,accel_real['y'] ,accel_real['z'], orient_rad,orient_deg )))
+               .format(accel_procc[0] ,accel_procc[1] ,accel_procc[2], orient_rad,orient_deg )))
 
     return
     
