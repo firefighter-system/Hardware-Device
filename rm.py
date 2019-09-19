@@ -35,24 +35,24 @@ while True:
                 "franko":{
                     "Temperature": temperature1,
                     "Humidity": humidity1,
-                },
+                    },
                 "yuhan":{
                     "Temperature": temperature2,
                     "Humidity": humidity2,
-                },
+                    },
                 "filip":{
                     "Temperature": temperature3,
                     "Humidity": humidity3,
-                },
+                    },
                 "arsham":{
                     "Temperature": temperature4,
                     "Humidity": humidity4,
-                },
+                    },
+                }
             }
-        }
     }
 
-    result = db.push(data)
+    result = db.child("active_users").push(data)
     print("Res: " + str(result))
 
     time.sleep(2)
