@@ -71,7 +71,7 @@ while True:
             }
     }
 
-    result = db.child("active_users").push(data)
+    result = db.child("pi_data").push(data)
     print("Res: " + str(result))
 
     time.sleep(5)
