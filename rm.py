@@ -44,28 +44,28 @@ while True:
         dt:{
             "users":{
                 "arsham":{
-                    "Chest Temperature": chestTemp1,
-                    "External Temperature": extTemp1,
-                    "Humidity": hum1,
-                    "Heartbeat": hartbt1,
+                    "chestTemperature": chestTemp1,
+                    "externalTemperature": extTemp1,
+                    "humidity": hum1,
+                    "heartbeat": hartbt1,
                     },
                 "filip":{
-                    "Chest Temperature": chestTemp2,
-                    "External Temperature": extTemp2,
-                    "Humidity": hum2,
-                    "Heartbeat": hartbt2,
+                    "chestTemperature": chestTemp2,
+                    "externalTemperature": extTemp2,
+                    "humidity": hum2,
+                    "heartbeat": hartbt2,
                     },
                 "franko":{
-                    "Chest Temperature": chestTemp3,
-                    "External Temperature": extTemp3,
-                    "Humidity": hum3,
-                    "Heartbeat": hartbt3,
+                    "chestTemperature": chestTemp3,
+                    "externalTemperature": extTemp3,
+                    "humidity": hum3,
+                    "heartbeat": hartbt3,
                     },
                 "yuhan":{
-                    "Chest Temperature": chestTemp4,
-                    "External Temperature": extTemp4,
-                    "Humidity": hum4,
-                    "Heartbeat": hartbt4,
+                    "chestTemperature": chestTemp4,
+                    "externalTemperature": extTemp4,
+                    "humidity": hum4,
+                    "heartbeat": hartbt4,
                     },
                 }
             }
