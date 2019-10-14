@@ -5,15 +5,6 @@ import busio
 import threading
 from adafruit_ads1x15.analog_in import AnalogIn
 
-def main():
-    
-    sensor = HeartRateSensor()
-    sensor.startAsyncBPM()
-    
-    while True:
-        
-        
-        time.sleep(0.1)
 
 class HeartRateSensor:
     
@@ -21,8 +12,8 @@ class HeartRateSensor:
         self.i2c = busio.I2C(board.SCL, board.SDA)
         
         self.ads = ADS.ADS1015(self.i2c)
-        self.ads.gain = 1
-        self.ads.data_rate = 128
+        self.ads.gain = 2/3
+        self.ads.data_rate = 1600
         self.chan = AnalogIn(self.ads, ADS.P0)
         
         self.BPM = 0
@@ -36,7 +27,7 @@ class HeartRateSensor:
         lastBeatTime = 0        # used to find IBI
         P = 512                 # used to find peak in pulse wave, seeded
         T = 512                 # used to find trough in pulse wave, seeded
-        thresh = 525            # used to find instant moment of heart beat, seeded
+        thresh = 520            # used to find instant moment of heart beat, seeded
         amp = 100               # used to hold amplitude of pulse waveform, seeded
         firstBeat = True        # used to seed rate array so we startup with reasonable BPM
         secondBeat = False      # used to seed rate array so we startup with reasonable BPM
@@ -49,7 +40,7 @@ class HeartRateSensor:
             
 
             Signal = 4*self.chan.value
-            
+      
             currentTime = int(time.time()*1000)
             
             sampleCounter += currentTime - lastTime
@@ -92,7 +83,7 @@ class HeartRateSensor:
 
                     runningTotal /= len(rate)           # average the IBI values 
                     self.BPM = 60000/runningTotal
-                    print(self.BPM)
+                    
                     # how many beats can fit into a minute? that's BPM!
 
             if Signal > thresh and Pulse == True:       # when the values are going down, the beat is over

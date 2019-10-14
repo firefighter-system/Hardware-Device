@@ -1,6 +1,7 @@
 import sys
 import Adafruit_DHT
 import pyrebase
+import time
 
 while True:
 
@@ -23,3 +24,4 @@ while True:
     
     result = db.push(data)    
     print(result)
+    time.sleep(5)
