@@ -1,8 +1,13 @@
 from sense_hat import SenseHat
 
-import json
 import time
 import math
+import sys
+import pyrebase
+import random
+import datetime
+import json
+import re
 
 from HeartRate import HeartRateSensor
 from OrientationUnit import OrientationSensor
@@ -39,14 +44,16 @@ def main():
               "storageBucket": "firefightingmonitoringsystem.appspot.com"
              }
     fireBase = pyrebase.initialize_app(config)
-    
+
+    dt = str(datetime.datetime.now().time().isoformat())
+    dt = re.sub("\.", "_", dt)
     data = {
         dt:{
             "users":{
                 "PI-1":{
                     "chestTemperature": 5,
-                    "externalTemperature": 10,
-                    "humidity": 10,
+                    "externalTemperature": orientationsensor.sensehat.get_temperature(),
+                    "pressure": orientationsensor.sensehat.get_pressure(),
                     "heartbeat": heartsensor.BPM,
                     }
                 }
@@ -55,11 +62,27 @@ def main():
     
     db = fireBase.database()
     
-    result = db.push(data)  
+    '''result = db.push(data) ''' 
     
     while True:
+        dt = str(datetime.datetime.now().time().isoformat())
+        dt = re.sub("\.", "_", dt)
+        data = {
+            dt:{
+                "users":{
+                    "PI-1":{
+                        "chestTemperature": 5,
+                        "externalTemperature": orientationsensor.sensehat.get_temperature(),
+                        "pressure": orientationsensor.sensehat.get_pressure(),
+                        "heartbeat": heartsensor.BPM,
+                        }
+                    }
+                }
+        }
         led.tempo = heartsensor.BPM
+        print(led.tempo)
         time.sleep(1)
+        '''result = db.push(data) '''
     
     
     

@@ -12,7 +12,7 @@ class HeartRateSensor:
         self.i2c = busio.I2C(board.SCL, board.SDA)
         
         self.ads = ADS.ADS1015(self.i2c)
-        self.ads.gain = 2/3
+        self.ads.gain = 1
         self.ads.data_rate = 1600
         self.chan = AnalogIn(self.ads, ADS.P0)
         
@@ -27,7 +27,7 @@ class HeartRateSensor:
         lastBeatTime = 0        # used to find IBI
         P = 512                 # used to find peak in pulse wave, seeded
         T = 512                 # used to find trough in pulse wave, seeded
-        thresh = 520            # used to find instant moment of heart beat, seeded
+        thresh = 3000            # used to find instant moment of heart beat, seeded
         amp = 100               # used to hold amplitude of pulse waveform, seeded
         firstBeat = True        # used to seed rate array so we startup with reasonable BPM
         secondBeat = False      # used to seed rate array so we startup with reasonable BPM
@@ -38,14 +38,14 @@ class HeartRateSensor:
         
         while True:
             
-
+            
             Signal = 4*self.chan.value
       
             currentTime = int(time.time()*1000)
             
             sampleCounter += currentTime - lastTime
             lastTime = currentTime
-            
+            print(Signal)
             N = sampleCounter - lastBeatTime
             # find the peak and trough of the pulse wave
             if Signal < thresh and N > (IBI/5.0)*3:     # avoid dichrotic noise by waiting 3/5 of last IBI
@@ -86,7 +86,7 @@ class HeartRateSensor:
                     
                     # how many beats can fit into a minute? that's BPM!
 
-            if Signal > thresh and Pulse == True:       # when the values are going down, the beat is over
+            if Signal < thresh and Pulse == True:       # when the values are going down, the beat is over
                 Pulse = False                           # reset the Pulse flag so we can do it again
                 amp = P - T                             # get amplitude of the pulse wave
                 thresh = amp/2 + T                      # set thresh at 50% of the amplitude
@@ -94,7 +94,7 @@ class HeartRateSensor:
                 T = thresh
 
             if N > 2500:                                # if 2.5 seconds go by without a beat
-                thresh = 512                            # set thresh default
+                thresh = 3000                            # set thresh default
                 P = 512                                 # set P default
                 T = 512                                 # set T default
                 lastBeatTime = sampleCounter            # bring the lastBeatTime up to date        
