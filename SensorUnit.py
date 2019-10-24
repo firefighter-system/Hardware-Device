@@ -30,6 +30,23 @@ class BasicSensorInformation:
     
 def main():
     
+    
+    hum2 = random.randint(30,40)
+    hum3 = random.randint(30,40)
+    hum4 = random.randint(30,40)
+    
+    chestTemp2 = random.randint(40,50)
+    chestTemp3 = random.randint(40,50)
+    chestTemp4 = random.randint(40,50)
+    
+    extTemp2 = random.randint(100,120)
+    extTemp3 = random.randint(100,120)
+    extTemp4 = random.randint(100,120)
+
+    hartbt2 = random.randint(70,100)
+    hartbt3 = random.randint(70,100)
+    hartbt4 = random.randint(70,100)    
+    
     heartsensor = HeartRateSensor()
     heartsensor.startAsyncBPM()
     orientationsensor = OrientationSensor()
@@ -55,14 +72,32 @@ def main():
                     "externalTemperature": orientationsensor.sensehat.get_temperature(),
                     "pressure": orientationsensor.sensehat.get_pressure(),
                     "heartbeat": heartsensor.BPM,
-                    }
+                    },
+                "filip":{
+                    "chestTemperature": chestTemp2,
+                    "externalTemperature": extTemp2,
+                    "humidity": hum2,
+                    "heartbeat": hartbt2,
+                    },
+                "franko":{
+                    "chestTemperature": chestTemp3,
+                    "externalTemperature": extTemp3,
+                    "humidity": hum3,
+                    "heartbeat": hartbt3,
+                    },
+                "yuhan":{
+                    "chestTemperature": chestTemp4,
+                    "externalTemperature": extTemp4,
+                    "humidity": hum4,
+                    "heartbeat": hartbt4,
+                    },
                 }
             }
     }
     
     db = fireBase.database()
     
-    '''result = db.push(data) ''' 
+    '''result = db.child("pi_data").push(data)''' 
     
     while True:
         dt = str(datetime.datetime.now().time().isoformat())
@@ -75,14 +110,32 @@ def main():
                         "externalTemperature": orientationsensor.sensehat.get_temperature(),
                         "pressure": orientationsensor.sensehat.get_pressure(),
                         "heartbeat": heartsensor.BPM,
-                        }
+                        },
+                    "filip":{
+                        "chestTemperature": chestTemp2,
+                        "externalTemperature": extTemp2,
+                        "humidity": hum2,
+                        "heartbeat": hartbt2,
+                        },
+                    "franko":{
+                        "chestTemperature": chestTemp3,
+                        "externalTemperature": extTemp3,
+                        "humidity": hum3,
+                        "heartbeat": hartbt3,
+                        },
+                    "yuhan":{
+                        "chestTemperature": chestTemp4,
+                        "externalTemperature": extTemp4,
+                        "humidity": hum4,
+                        "heartbeat": hartbt4,
+                        },
                     }
                 }
         }
         led.tempo = heartsensor.BPM
         print(led.tempo)
-        time.sleep(1)
-        '''result = db.push(data) '''
+        time.sleep(5)
+        '''result = db.child("pi_data").push(data)'''
     
     
     
