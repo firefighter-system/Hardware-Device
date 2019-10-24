@@ -12,8 +12,8 @@ class HeartRateSensor:
         self.i2c = busio.I2C(board.SCL, board.SDA)
         
         self.ads = ADS.ADS1015(self.i2c)
-        self.ads.gain = 1
-        self.ads.data_rate = 1600
+        self.ads.gain = 2/3
+        self.ads.data_rate = 490
         self.chan = AnalogIn(self.ads, ADS.P0)
         
         self.BPM = 0
@@ -27,7 +27,7 @@ class HeartRateSensor:
         lastBeatTime = 0        # used to find IBI
         P = 512                 # used to find peak in pulse wave, seeded
         T = 512                 # used to find trough in pulse wave, seeded
-        thresh = 3000            # used to find instant moment of heart beat, seeded
+        thresh = 512            # used to find instant moment of heart beat, seeded
         amp = 100               # used to hold amplitude of pulse waveform, seeded
         firstBeat = True        # used to seed rate array so we startup with reasonable BPM
         secondBeat = False      # used to seed rate array so we startup with reasonable BPM
@@ -39,7 +39,7 @@ class HeartRateSensor:
         while True:
             
             
-            Signal = 4*self.chan.value
+            Signal = self.chan.value
       
             currentTime = int(time.time()*1000)
             
@@ -94,7 +94,7 @@ class HeartRateSensor:
                 T = thresh
 
             if N > 2500:                                # if 2.5 seconds go by without a beat
-                thresh = 3000                            # set thresh default
+                thresh = 512                            # set thresh default
                 P = 512                                 # set P default
                 T = 512                                 # set T default
                 lastBeatTime = sampleCounter            # bring the lastBeatTime up to date        

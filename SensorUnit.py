@@ -140,7 +140,7 @@ def main():
                 }
         }
         led.tempo = heartsensor.BPM
-        print(led.tempo)
+        print(heartsensor.BPM)
         time.sleep(5)
         '''result = db.child("pi_data").push(data)'''
     
