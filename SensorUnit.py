@@ -30,19 +30,22 @@ class BasicSensorInformation:
     
 def main():
     
-    
+    #Fake Humidity data
     hum2 = random.randint(30,40)
     hum3 = random.randint(30,40)
     hum4 = random.randint(30,40)
     
+    #Fake Chest Temp data
     chestTemp2 = random.randint(40,50)
     chestTemp3 = random.randint(40,50)
     chestTemp4 = random.randint(40,50)
     
+    #Fake External Temp data
     extTemp2 = random.randint(100,120)
     extTemp3 = random.randint(100,120)
     extTemp4 = random.randint(100,120)
 
+    #Fake Heartbeat data
     hartbt2 = random.randint(70,100)
     hartbt3 = random.randint(70,100)
     hartbt4 = random.randint(70,100)    
@@ -61,7 +64,9 @@ def main():
               "storageBucket": "firefightingmonitoringsystem.appspot.com"
              }
     fireBase = pyrebase.initialize_app(config)
-
+    
+    #Users(filip, franko, yuhan) are fake
+    
     dt = str(datetime.datetime.now().time().isoformat())
     dt = re.sub("\.", "_", dt)
     data = {
@@ -100,6 +105,8 @@ def main():
     '''result = db.child("pi_data").push(data)''' 
     
     while True:
+        #Users(filip, franko, yuhan) are fake
+        
         dt = str(datetime.datetime.now().time().isoformat())
         dt = re.sub("\.", "_", dt)
         data = {
