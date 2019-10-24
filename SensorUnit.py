@@ -12,6 +12,8 @@ import re
 from HeartRate import HeartRateSensor
 from OrientationUnit import OrientationSensor
 from LEDUnit import LEDController
+from Temperature import TemperatureSensor
+
 
 class BasicSensorInformation:
 
@@ -56,6 +58,8 @@ def main():
     orientationsensor.startAsyncOrientation()
     led = LEDController()
     led.startDisplayThread()
+    tempsens = TemperatureSensor()
+    tempsens.startAsyncTempLoop()
     
     '''start firebase'''
     config = {"apiKey": "AIzaSyA20qu9ddnRJPAQgGpn9ySQLuqjLH2WWPI",
@@ -113,7 +117,7 @@ def main():
             dt:{
                 "users":{
                     "PI-1":{
-                        "chestTemperature": 5,
+                        "chestTemperature": tempsens.getTemp(),
                         "externalTemperature": orientationsensor.sensehat.get_temperature(),
                         "pressure": orientationsensor.sensehat.get_pressure(),
                         "heartbeat": heartsensor.BPM,
@@ -140,9 +144,8 @@ def main():
                 }
         }
         led.tempo = heartsensor.BPM
-        print(heartsensor.BPM)
-        time.sleep(5)
-        '''result = db.child("pi_data").push(data)'''
+        time.sleep(1)
+        result = db.child("pi_data").push(data)
     
     
     

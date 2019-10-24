@@ -45,7 +45,6 @@ class HeartRateSensor:
             
             sampleCounter += currentTime - lastTime
             lastTime = currentTime
-            print(Signal)
             N = sampleCounter - lastBeatTime
             # find the peak and trough of the pulse wave
             if Signal < thresh and N > (IBI/5.0)*3:     # avoid dichrotic noise by waiting 3/5 of last IBI
