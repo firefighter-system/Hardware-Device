@@ -32,12 +32,34 @@ def main():
     led = LEDController()
     led.startDisplayThread()
     
+    '''start firebase'''
+    config = {"apiKey": "AIzaSyA20qu9ddnRJPAQgGpn9ySQLuqjLH2WWPI",
+              "authDomain": "firefightingmonitoringsystem.firebaseapp.com",
+              "databaseURL": "https://firefightingmonitoringsystem.firebaseio.com/",
+              "storageBucket": "firefightingmonitoringsystem.appspot.com"
+             }
+    fireBase = pyrebase.initialize_app(config)
+    
+    data = {
+        dt:{
+            "users":{
+                "PI-1":{
+                    "chestTemperature": 5,
+                    "externalTemperature": 10,
+                    "humidity": 10,
+                    "heartbeat": heartsensor.BPM,
+                    }
+                }
+            }
+    }
+    
+    db = fireBase.database()
+    
+    result = db.push(data)  
     
     while True:
         led.tempo = heartsensor.BPM
         time.sleep(1)
-        print(orientationsensor.accel_procc)
-        print(heartsensor.BPM)
     
     
     
