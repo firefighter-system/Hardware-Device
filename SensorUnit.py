@@ -144,7 +144,7 @@ def main():
                 }
         }
         led.tempo = heartsensor.BPM
-        time.sleep(1)
+        time.sleep(5) #Try 5 seconds
         result = db.child("pi_data").child(dt).set(data)
 
         print("res: " + result)
