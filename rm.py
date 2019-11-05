@@ -7,6 +7,254 @@ import re
 from pyrebase import pyrebase
 
 
+
+config = {"apiKey": "AIzaSyA20qu9ddnRJPAQgGpn9ySQLuqjLH2WWPI",
+              "authDomain": "firefightingmonitoringsystem.firebaseapp.com",
+              "databaseURL": "https://firefightingmonitoringsystem.firebaseio.com/",
+              "storageBucket": "firefightingmonitoringsystem.appspot.com"
+             }
+fireBase = pyrebase.initialize_app(config)
+
+database = {
+  "piData": {
+    "users": {
+      "user1": {
+        "userProfile": {
+          "name": "Yuji Jeong",
+          "group": 10,
+          "age": 23,
+          "firefighterCode": "FEkdjs-23"
+        },
+        "status": {
+          "totalMissionCount": 23,
+          "currentMission": {
+            "ongoingMission": True,
+            "ongoingMissionNumber": 23
+          }
+        },
+        "missionData": {
+          "missionNumber": 23,
+          "data": {
+            "time0": {
+              "timestamp": "random time sttamp",
+              "userData": {
+                "heartRate": 99,
+                "bodyTemperature": 37.4,
+                "externalTemperature": 40.0
+              }
+            },
+            "time1": {
+              "timestamp": "time stamp +5 seconds",
+              "userData": {
+                "heartRate": 100,
+                "bodyTemperature": 37.0,
+                "externalTemperature": 42.0
+              }
+            },
+            "time2": {
+              "timestamp": "time stamp +5 seconds",
+              "userData": {
+                "heartRate": 100,
+                "bodyTemperature": 37.0,
+                "externalTemperature": 42.0
+              }
+            }
+          }
+        }
+      },
+      "user2": {
+        "userProfile": {
+          "name": "Yuhan Lee",
+          "group": 10,
+          "age": 23,
+          "firefighterCode": "FEkdjs-24"
+        },
+        "status": {
+          "totalMissionCount": 12,
+          "currentMission": {
+            "ongoingMission": True,
+            "ongoingMissionNumber": 23
+          }
+        },
+        "missionData": {
+          "ongoingMission": {
+            "missionNumber": 23,
+            "data": {
+              "time0": {
+                "timestamp": "random time sttamp",
+                "userData": {
+                  "heartRate": 99,
+                  "bodyTemperature": 37.4,
+                  "externalTemperature": 40.0
+                }
+              },
+              "time1": {
+                "timestamp": "time stamp +5 seconds",
+                "userData": {
+                  "heartRate": 100,
+                  "bodyTemperature": 37.0,
+                  "externalTemperature": 42.0
+                }
+              },
+              "time2": {
+                "timestamp": "time stamp +5 seconds",
+                "userData": {
+                  "heartRate": 100,
+                  "bodyTemperature": 37.0,
+                  "externalTemperature": 42.0
+                }
+              }
+            }
+          }
+        }
+      },
+      "user3": {
+        "userProfile": {
+          "name": "Studio Ghibli",
+          "group": 10,
+          "age": 23,
+          "firefighterCode": "FEkdjs-25"
+        },
+        "status": {
+          "totalMissionCount": 23,
+          "currentMission": {
+            "ongoingMission": True,
+            "ongoingMissionNumber": 23
+          }
+        },
+        "missionData": {
+          "ongoingMission": {
+            "missionNumber": 23,
+            "data": {
+              "time0": {
+                "timestamp": "random time sttamp",
+                "userData": {
+                  "heartRate": 99,
+                  "bodyTemperature": 37.4,
+                  "externalTemperature": 40.0
+                }
+              },
+              "time1": {
+                "timestamp": "time stamp +5 seconds",
+                "userData": {
+                  "heartRate": 100,
+                  "bodyTemperature": 37.0,
+                  "externalTemperature": 42.0
+                }
+              },
+              "time2": {
+                "timestamp": "time stamp +5 seconds",
+                "userData": {
+                  "heartRate": 100,
+                  "bodyTemperature": 37.0,
+                  "externalTemperature": 42.0
+                }
+              }
+            }
+          }
+        }
+      },
+      "user4": {
+        "userProfile": {
+          "name": "Ponyo Kiki",
+          "group": 10,
+          "age": 23,
+          "firefighterCode": "FEkdjs-26"
+        },
+        "status": {
+          "totalMissionCount": 80,
+          "currentMission": {
+            "ongoingMission": True,
+            "ongoingMissionNumber": 23
+          }
+        },
+        "missionData": {
+          "ongoingMission": {
+            "missionNumber": 23,
+            "data": {
+              "time0": {
+                "timestamp": "random time sttamp",
+                "userData": {
+                  "heartRate": 99,
+                  "bodyTemperature": 37.4,
+                  "externalTemperature": 40.0
+                }
+              },
+              "time1": {
+                "timestamp": "time stamp +5 seconds",
+                "userData": {
+                  "heartRate": 100,
+                  "bodyTemperature": 37.0,
+                  "externalTemperature": 42.0
+                }
+              },
+              "time2": {
+                "timestamp": "time stamp +5 seconds",
+                "userData": {
+                  "heartRate": 100,
+                  "bodyTemperature": 37.0,
+                  "externalTemperature": 42.0
+                }
+              }
+            }
+          }
+        }
+      },
+      "user5": {
+        "userProfile": {
+          "name": "Eric Laroche",
+          "group": 10,
+          "age": 23,
+          "firefighterCode": "FEkdjs-27"
+        },
+        "status": {
+          "totalMissionCount": 3,
+          "currentMission": {
+            "ongoingMission": True,
+            "ongoingMissionNumber": 23
+          }
+        },
+        "missionData": {
+          "ongoingMission": {
+            "missionNumber": 23,
+            "data": {
+              "time0": {
+                "timestamp": "random time sttamp",
+                "userData": {
+                  "heartRate": 99,
+                  "bodyTemperature": 37.4,
+                  "externalTemperature": 40.0
+                }
+              },
+              "time1": {
+                "timestamp": "time stamp +5 seconds",
+                "userData": {
+                  "heartRate": 100,
+                  "bodyTemperature": 37.0,
+                  "externalTemperature": 42.0
+                }
+              },
+              "time2": {
+                "timestamp": "time stamp +5 seconds",
+                "userData": {
+                  "heartRate": 100,
+                  "bodyTemperature": 37.0,
+                  "externalTemperature": 42.0
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+db = fireBase.database()
+#db.set(database)
+
+
+
 while True:
     hum1 = random.randint(30,40)
     hum2 = random.randint(30,40)
@@ -28,14 +276,7 @@ while True:
     hartbt3 = random.randint(70,100)
     hartbt4 = random.randint(70,100)
 
-    config = {"apiKey": "AIzaSyA20qu9ddnRJPAQgGpn9ySQLuqjLH2WWPI",
-              "authDomain": "firefightingmonitoringsystem.firebaseapp.com",
-              "databaseURL": "https://firefightingmonitoringsystem.firebaseio.com/",
-              "storageBucket": "firefightingmonitoringsystem.appspot.com"
-             }
-    fireBase = pyrebase.initialize_app(config)
 
-    db = fireBase.database()
     dt = str(datetime.datetime.now().date()) + "_" + str(datetime.datetime.now().time().isoformat())
     dt = re.sub("\.", "_", dt)
     print ("Time pushed: " + dt)
@@ -69,7 +310,7 @@ while True:
             }
     }
 
-    result = db.child("pi_data").child(dt).set(data)
+    result = db.child("piData").child("users").child("user1").child("missionData").child(dt).set(data)
     print("Res: " + str(result))
 
     time.sleep(1)
