@@ -72,4 +72,4 @@ while True:
     result = db.child("pi_data").child(dt).set(data)
     print("Res: " + str(result))
 
-    time.sleep(5)
+    time.sleep(1)
