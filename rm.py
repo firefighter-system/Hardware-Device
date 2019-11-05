@@ -36,42 +36,40 @@ while True:
     fireBase = pyrebase.initialize_app(config)
 
     db = fireBase.database()
-    dt = str(datetime.datetime.now().time().isoformat())
+    dt = str(datetime.datetime.now().date()) + "_" + str(datetime.datetime.now().time().isoformat())
     dt = re.sub("\.", "_", dt)
     print ("Time pushed: " + dt)
 
     data = {
-        dt:{
-            "users":{
-                "arsham":{
-                    "chestTemperature": chestTemp1,
-                    "externalTemperature": extTemp1,
-                    "humidity": hum1,
-                    "heartbeat": hartbt1,
-                    },
-                "filip":{
-                    "chestTemperature": chestTemp2,
-                    "externalTemperature": extTemp2,
-                    "humidity": hum2,
-                    "heartbeat": hartbt2,
-                    },
-                "franko":{
-                    "chestTemperature": chestTemp3,
-                    "externalTemperature": extTemp3,
-                    "humidity": hum3,
-                    "heartbeat": hartbt3,
-                    },
-                "yuhan":{
-                    "chestTemperature": chestTemp4,
-                    "externalTemperature": extTemp4,
-                    "humidity": hum4,
-                    "heartbeat": hartbt4,
-                    },
-                }
+        "users":{
+            "arsham":{
+                "chestTemperature": chestTemp1,
+                "externalTemperature": extTemp1,
+                "humidity": hum1,
+                "heartbeat": hartbt1,
+                },
+            "filip":{
+                "chestTemperature": chestTemp2,
+                "externalTemperature": extTemp2,
+                "humidity": hum2,
+                "heartbeat": hartbt2,
+                },
+            "franko":{
+                "chestTemperature": chestTemp3,
+                "externalTemperature": extTemp3,
+                "humidity": hum3,
+                "heartbeat": hartbt3,
+                },
+            "yuhan":{
+                "chestTemperature": chestTemp4,
+                "externalTemperature": extTemp4,
+                "humidity": hum4,
+                "heartbeat": hartbt4,
+                },
             }
     }
 
-    result = db.child("pi_data").push(data)
+    result = db.child("pi_data").child(dt).set(data)
     print("Res: " + str(result))
 
     time.sleep(5)
