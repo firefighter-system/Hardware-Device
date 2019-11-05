@@ -71,13 +71,54 @@ def main():
     
     #Users(filip, franko, yuhan) are fake
     
-    dt = str(datetime.datetime.now().time().isoformat())
+    db = fireBase.database()
+    dt = str(datetime.datetime.now().date()) + "_" + str(datetime.datetime.now().time().isoformat())
     dt = re.sub("\.", "_", dt)
+    print ("Time pushed: " + dt)
     data = {
-        dt:{
+        "users":{
+            "arsham":{
+                "chestTemperature": tempsens.getTemp(),
+                "externalTemperature": orientationsensor.sensehat.get_temperature(),
+                "pressure": orientationsensor.sensehat.get_pressure(),
+                "heartbeat": heartsensor.BPM,
+                },
+            "filip":{
+                "chestTemperature": chestTemp2,
+                "externalTemperature": extTemp2,
+                "humidity": hum2,
+                "heartbeat": hartbt2,
+                },
+            "franko":{
+                "chestTemperature": chestTemp3,
+                "externalTemperature": extTemp3,
+                "humidity": hum3,
+                "heartbeat": hartbt3,
+                },
+            "yuhan":{
+                "chestTemperature": chestTemp4,
+                "externalTemperature": extTemp4,
+                "humidity": hum4,
+                "heartbeat": hartbt4,
+                },
+            }
+    }
+    
+    db = fireBase.database()
+    
+    '''result = db.child("pi_data").child(dt).set(data)''' 
+    
+    while True:
+        #Users(filip, franko, yuhan) are fake
+        
+        db = fireBase.database()
+        dt = str(datetime.datetime.now().date()) + "_" + str(datetime.datetime.now().time().isoformat())
+        dt = re.sub("\.", "_", dt)
+        print ("Time pushed: " + dt)
+        data = {
             "users":{
-                "PI-1":{
-                    "chestTemperature": 5,
+                "arsham":{
+                    "chestTemperature": tempsens.getTemp(),
                     "externalTemperature": orientationsensor.sensehat.get_temperature(),
                     "pressure": orientationsensor.sensehat.get_pressure(),
                     "heartbeat": heartsensor.BPM,
@@ -101,54 +142,12 @@ def main():
                     "heartbeat": hartbt4,
                     },
                 }
-            }
-    }
-    
-    db = fireBase.database()
-    
-    '''result = db.child("pi_data").push(data)''' 
-    
-    while True:
-        #Users(filip, franko, yuhan) are fake
-        
-        dt = str(datetime.datetime.now().time().isoformat())
-        dt = re.sub("\.", "_", dt)
-        data = {
-            dt:{
-                "users":{
-                    "PI-1":{
-                        "chestTemperature": tempsens.getTemp(),
-                        "externalTemperature": orientationsensor.sensehat.get_temperature(),
-                        "pressure": orientationsensor.sensehat.get_pressure(),
-                        "heartbeat": heartsensor.BPM,
-                        },
-                    "filip":{
-                        "chestTemperature": chestTemp2,
-                        "externalTemperature": extTemp2,
-                        "humidity": hum2,
-                        "heartbeat": hartbt2,
-                        },
-                    "franko":{
-                        "chestTemperature": chestTemp3,
-                        "externalTemperature": extTemp3,
-                        "humidity": hum3,
-                        "heartbeat": hartbt3,
-                        },
-                    "yuhan":{
-                        "chestTemperature": chestTemp4,
-                        "externalTemperature": extTemp4,
-                        "humidity": hum4,
-                        "heartbeat": hartbt4,
-                        },
-                    }
-                }
         }
         led.tempo = heartsensor.BPM
         time.sleep(1)
-        result = db.child("pi_data").push(data)
-    
-    
-    
-    
+        result = db.child("pi_data").child(dt).set(data)
+
+        print("res: " + result)
+
 if __name__ == "__main__":
     main()
