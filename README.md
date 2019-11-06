@@ -1,8 +1,8 @@
 # Capstone-FireFightingExternalUnit
 
-Running "Firebase Script" (Fake Data Generator)
-  1. On terminal, locate the file "rm.py"
-  2. Run the script by typing "python3 rm.py"
+Running "Python Script" (Fake Data Generator)
+  1. In project directory run `python3 mock.py`
+  2. Stop the script by just quitting the process
   
  Running "Firebase Script" (Real Data Generator)
   1. On terminal, locate the file "SensorUnit.py"
