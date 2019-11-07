@@ -13,6 +13,7 @@ config = {"apiKey": "AIzaSyA20qu9ddnRJPAQgGpn9ySQLuqjLH2WWPI",
              }
 fireBase = pyrebase.initialize_app(config)
 db = fireBase.database(); 
+db.remove() #removes previous data
 
 chestTemperature = []; 
 externalTemperature = []; 
@@ -50,7 +51,9 @@ while True:
     },
   }
 
-  yuhan_ct_node = db.child("pi_data").child("users").set(dt); 
+  yuhan_ct_node = db.child("pi_data/users").set(dt); 
+
+  print("Pushing: " + str(yuhan_ct_node))
   # yuhan_et_node = db.child("pi_data").child("users").child("0").child("externalTemperature").set(externalTemperature); 
   # yuhan_hr_node = db.child("pi_data").child("users").child("0").child("heartRate").set(heartRate); 
   # yuhan_hum_node = db.child("pi_data").child("users").child("0").child("humidity").set(humidity); 
