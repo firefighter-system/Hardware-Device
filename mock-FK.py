@@ -41,9 +41,18 @@ while True:
 
   time.sleep(5)
 
-  yuhan_ct_node = db.child("pi_data").child("users").child("0").child("chestTemperature").set(chestTemperature); 
-  yuhan_et_node = db.child("pi_data").child("users").child("0").child("externalTemperature").set(externalTemperature); 
-  yuhan_hr_node = db.child("pi_data").child("users").child("0").child("heartRate").set(heartRate); 
-  yuhan_hum_node = db.child("pi_data").child("users").child("0").child("humidity").set(humidity); 
+  dt = {
+    "0":{
+      "chestTemperature":chestTemperature,
+      "externalTemperature":externalTemperature,
+      "heartRate":heartRate,
+      "humidity":humidity,
+    },
+  }
+
+  yuhan_ct_node = db.child("pi_data").child("users").set(dt); 
+  # yuhan_et_node = db.child("pi_data").child("users").child("0").child("externalTemperature").set(externalTemperature); 
+  # yuhan_hr_node = db.child("pi_data").child("users").child("0").child("heartRate").set(heartRate); 
+  # yuhan_hum_node = db.child("pi_data").child("users").child("0").child("humidity").set(humidity); 
 
 
