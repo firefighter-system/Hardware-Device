@@ -42,7 +42,7 @@ while True:
 
   time.sleep(5)
 
-  dt = {
+  usrData = {
     "0":{
       "chestTemperature":chestTemperature,
       "externalTemperature":externalTemperature,
@@ -51,11 +51,8 @@ while True:
     },
   }
 
-  yuhan_ct_node = db.child("pi_data/users").set(dt); 
+  usr1Node = db.child("pi_data/users").set(usrData); 
 
-  print("Pushing: " + str(yuhan_ct_node))
-  # yuhan_et_node = db.child("pi_data").child("users").child("0").child("externalTemperature").set(externalTemperature); 
-  # yuhan_hr_node = db.child("pi_data").child("users").child("0").child("heartRate").set(heartRate); 
-  # yuhan_hum_node = db.child("pi_data").child("users").child("0").child("humidity").set(humidity); 
+  print("Pushing: {}\n".format(str(usr1Node)))
 
 
