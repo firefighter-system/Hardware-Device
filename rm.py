@@ -82,4 +82,4 @@ while True:
     result = db.child("pi_data/users/usr4").update(data4)
     print("Res: " + str(result))
 
-    time.sleep(2) #5 second works?
+    time.sleep(5) #5 second works?
