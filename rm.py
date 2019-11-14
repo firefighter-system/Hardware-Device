@@ -39,47 +39,53 @@ while True:
 
 
     timestamp = datetime.datetime.now().time().isoformat()
-    dt = str(datetime.datetime.now().date()) + "_" + str(datetime.datetime.now().time().isoformat())
-    dt = re.sub("\.", "_", dt)
-    print ("Time pushed: " + dt)
+    dtD = str(datetime.datetime.now().date()) + "_" + str(datetime.datetime.now().time().isoformat())
+    dtD = re.sub("\.", "_", dtD)
+    timestamp = re.sub("\.", "_", timestamp)
+    timestamp = re.sub("_.*", "", timestamp)
+    print ("Time pushed: " + dtD)
 
     data1 = {
-            dt:{
+            dtD:{
                 "chestTemperature":chestTemp1,
                 "externalTemperature":extTemp1,
                 "heartRate":hartbt1,
                 "humidity":hum1,
+                "dateTime": timestamp,
             },
     }
     data2 = {
-            dt:{
+            dtD:{
                 "chestTemperature":chestTemp2,
                 "externalTemperature":extTemp2,
                 "heartRate":hartbt2,
                 "humidity":hum2,
+                "dateTime": timestamp,
             },
     }
     data3 = {
-            dt:{
+            dtD:{
                 "chestTemperature":chestTemp3,
                 "externalTemperature":extTemp3,
                 "heartRate":hartbt3,
                 "humidity":hum3,
+                "dateTime": timestamp,
             },
     }
     data4 = {
-            dt:{
+            dtD:{
                 "chestTemperature":chestTemp4,
                 "externalTemperature":extTemp4,
                 "heartRate":hartbt4,
                 "humidity":hum4,
+                "dateTime": timestamp,
             },
     }
 
     result = db.child("pi_data/users/usr1").update(data1)
-    result = db.child("pi_data/users/usr2").update(data2)
-    result = db.child("pi_data/users/usr3").update(data3)
-    result = db.child("pi_data/users/usr4").update(data4)
+    result2 = db.child("pi_data/users/usr2").update(data2)
+    result3= db.child("pi_data/users/usr3").update(data3)
+    result4 = db.child("pi_data/users/usr4").update(data4)
     print("Res: " + str(result))
 
     time.sleep(5) #5 second works?
