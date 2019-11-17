@@ -1,7 +1,3 @@
-#!/usr/bin/env python3
-# Original Code: https://gist.github.com/Lauszus/5785023#file-gps-py
-# Created by: Kristian Sloth Lauszus
-
 import time
 import serial
 
@@ -19,12 +15,12 @@ def getTime(string, format, returnFormat):
 
 
 def getLatLng(latString, lngString):
-    if latString[2:] == '':
-        lat = 45.419298
+    if latString[2:] == '': #If not reachable
+        lat = 45.419298 #Fix cood
     else:
         lat = latString[:2].lstrip('0') + "." + "%.7s" % str(float(latString[2:]) * 1.0 / 60.0).lstrip("0.")
-    if lngString[3:] == '':
-        lng = 75.678873
+    if lngString[3:] == '': #If not reachable
+        lng = 75.678873 #Fix cood
     else:
         lng = lngString[:3].lstrip('0') + "." + "%.7s" % str(float(lngString[3:]) * 1.0 / 60.0).lstrip("0.")
     return lat, lng
