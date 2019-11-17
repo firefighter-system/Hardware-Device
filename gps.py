@@ -19,8 +19,14 @@ def getTime(string, format, returnFormat):
 
 
 def getLatLng(latString, lngString):
-    lat = latString[:2].lstrip('0') + "." + "%.7s" % str(float(latString[2:]) * 1.0 / 60.0).lstrip("0.")
-    lng = lngString[:3].lstrip('0') + "." + "%.7s" % str(float(lngString[3:]) * 1.0 / 60.0).lstrip("0.")
+    if latString[2:] == '':
+        lat = 45.419298
+    else:
+        lat = latString[:2].lstrip('0') + "." + "%.7s" % str(float(latString[2:]) * 1.0 / 60.0).lstrip("0.")
+    if lngString[3:] == '':
+        lng = 75.678873
+    else:
+        lng = lngString[:3].lstrip('0') + "." + "%.7s" % str(float(lngString[3:]) * 1.0 / 60.0).lstrip("0.")
     return lat, lng
 
 
@@ -143,7 +149,8 @@ def checksum(line):
         return False
 
 if __name__ == '__main__':
-    ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)  # Open Serial port
+    # Change directory to usb port
+    ser = serial.Serial('/dev/tty.usbmodem14201', 9600, timeout=1)  # Open Serial port
     try:
         while True:
             line = readString()
@@ -156,10 +163,10 @@ if __name__ == '__main__':
                     printGGA(lines)
                     pass
                 elif lines[0] == "GPGSA":
-                    # printGSA(lines)
+                   # printGSA(lines)
                     pass
                 elif lines[0] == "GPGSV":
-                    # printGSV(lines)
+                    #printGSV(lines)
                     pass
                 elif lines[0] == "GPGLL":
                     printGLL(lines)
