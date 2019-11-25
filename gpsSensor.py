@@ -191,3 +191,4 @@ class GPS:
     def stopAsync(self):
         self.thread.stopped = True
         return
+

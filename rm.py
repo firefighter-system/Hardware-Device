@@ -37,14 +37,14 @@ while True:
     hartbt3 = random.randint(70,100)
     hartbt4 = random.randint(70,100)
 
-    gpsN1 = round(random.uniform(45.0,45.9),6)
-    gpsW1 = round(random.uniform(75.0,75.9),6)
-    gpsN2 = round(random.uniform(45.0,45.9),6)
-    gpsW2 = round(random.uniform(75.0,75.9),6)
-    gpsN3 = round(random.uniform(45.0,45.9),6)
-    gpsW3 = round(random.uniform(75.0,75.9),6)
-    gpsN4 = round(random.uniform(45.0,45.9),6)
-    gpsW4 = round(random.uniform(75.0,75.9),6)
+    gpsN1 = round(random.uniform(45.419340,45.419349),6)
+    gpsW1 = round(random.uniform(75.678930,75.678939),6)
+    gpsN2 = round(random.uniform(45.419340,45.419349),6)
+    gpsW2 = round(random.uniform(75.678930,75.678939),6)
+    gpsN3 = round(random.uniform(45.419340,45.419349),6)
+    gpsW3 = round(random.uniform(75.678930,75.678939),6)
+    gpsN4 = round(random.uniform(45.419340,45.419349),6)
+    gpsW4 = round(random.uniform(75.678930,75.678939),6)
 
 
     timestamp = datetime.datetime.now().time().isoformat()
