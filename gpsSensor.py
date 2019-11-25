@@ -5,7 +5,10 @@ import threading
 class GPS:
     
     def __init__(self):
-        self.ser = serial.Serial('/dev/tty.usbmodem14201', 9600, timeout=1)  # Open Serial port
+        self.ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)  # Open Serial port
+        self.lat = 0
+        self.lng = 0
+        
 
     
     def readString(self):
@@ -23,31 +26,33 @@ class GPS:
 
     def getLatLng(self, latString, lngString):
         if latString[2:] == '': #If not reachable
-            lat = 45.419298 #Fix cood
+            self.lat = 45.419298 #Fix cood
         else:
-            lat = latString[:2].lstrip('0') + "." + "%.7s" % str(float(latString[2:]) * 1.0 / 60.0).lstrip("0.")
+            self.lat = latString[:2].lstrip('0') + "." + "%.7s" % str(float(latString[2:]) * 1.0 / 60.0).lstrip("0.")
         if lngString[3:] == '': #If not reachable
-            lng = 75.678873 #Fix cood
+            self.lng = 75.678873 #Fix cood
         else:
-            lng = lngString[:3].lstrip('0') + "." + "%.7s" % str(float(lngString[3:]) * 1.0 / 60.0).lstrip("0.")
-        return lat, lng
+            self.lng = lngString[:3].lstrip('0') + "." + "%.7s" % str(float(lngString[3:]) * 1.0 / 60.0).lstrip("0.")
+        return self.lat, self.lng
 
 
     def printRMC(self, lines):
-        print("========================================RMC========================================")
+       # print("========================================RMC========================================")
         # print(lines, '\n')
-        print("Fix taken at:", getTime(lines[1] + lines[9], "%H%M%S.%f%d%m%y", "%a %b %d %H:%M:%S %Y"), "UTC")
-        print("Status (A=OK,V=KO):", lines[2])
-        latlng = getLatLng(lines[3], lines[5])
-        print("Lat,Long: ", latlng[0], lines[4], ", ", latlng[1], lines[6], sep='')
-        print("Speed (knots):", lines[7])
-        print("Track angle (deg):", lines[8])
-        print("Magnetic variation: ", lines[10], end='')
+        #print("Fix taken at:", getTime(lines[1] + lines[9], "%H%M%S.%f%d%m%y", "%a %b %d %H:%M:%S %Y"), "UTC")
+        #print("Status (A=OK,V=KO):", lines[2])
+        latlng = self.getLatLng(lines[3], lines[5])
+        #print("Lat,Long: ", latlng[0], lines[4], ", ", latlng[1], lines[6], sep='')
+        #print("Speed (knots):", lines[7])
+        #print("Track angle (deg):", lines[8])
+        #print("Magnetic variation: ", lines[10], end='')
         if len(
-                lines) == 13:  # The returned string will be either 12 or 13 - it will return 13 if NMEA standard used is above 2.3
-            print(lines[11])
-            print("Mode (A=Autonomous, D=Differential, E=Estimated, N=Data not valid):", lines[12].partition("*")[0])
+                lines) == 13:
+            x = 5# The returned string will be either 12 or 13 - it will return 13 if NMEA standard used is above 2.3
+            #print(lines[11])
+            #print("Mode (A=Autonomous, D=Differential, E=Estimated, N=Data not valid):", lines[12].partition("*")[0])
         else:
+            x = 5
             print(lines[11].partition("*")[0])
 
         return
@@ -56,8 +61,8 @@ class GPS:
     def printGGA(self, lines):
         print("========================================GGA========================================")
         # print(lines, '\n')
-        print("Fix taken at:", getTime(lines[1], "%H%M%S.%f", "%H:%M:%S"), "UTC")
-        latlng = getLatLng(lines[2], lines[4])
+        print("Fix taken at:", self.getTime(lines[1], "%H%M%S.%f", "%H:%M:%S"), "UTC")
+        latlng = self.getLatLng(lines[2], lines[4])
         print("Lat,Long: ", latlng[0], lines[3], ", ", latlng[1], lines[5], sep='')
         print("Fix quality (0 = invalid, 1 = fix, 2..8):", lines[6])
         print("Satellites:", lines[7].lstrip("0"))
@@ -108,9 +113,9 @@ class GPS:
         print("========================================GLL========================================")
         # print(lines, '\n')
 
-        latlng = getLatLng(lines[1], lines[3])
+        latlng = self.getLatLng(lines[1], lines[3])
         print("Lat,Long: ", latlng[0], lines[2], ", ", latlng[1], lines[4], sep='')
-        print("Fix taken at:", getTime(lines[5], "%H%M%S.%f", "%H:%M:%S"), "UTC")
+        print("Fix taken at:", self.getTime(lines[5], "%H%M%S.%f", "%H:%M:%S"), "UTC")
         print("Status (A=OK,V=KO):", lines[6])
         if lines[7].partition("*")[0]:  # Extra field since NMEA standard 2.3
             print("Mode (A=Autonomous, D=Differential, E=Estimated, N=Data not valid):", lines[7].partition("*")[0])
@@ -153,17 +158,16 @@ class GPS:
 
     def getGPSCoord(self):
         # Change directory to usb port
-        ser = serial.Serial('/dev/tty.usbmodem14201', 9600, timeout=1)  # Open Serial port
         try:
-            while True:
-                line = readString()
+            while not self.thread.stopped:
+                line = self.readString()
                 lines = line.split(",")
-                if checksum(line):
+                if self.checksum(line):
                     if lines[0] == "GPRMC":
-                        printRMC(lines)
+                        self.printRMC(lines)
                         pass
                     elif lines[0] == "GPGGA":
-                        printGGA(lines)
+                        #self.printGGA(lines)
                         pass
                     elif lines[0] == "GPGSA":
                        # printGSA(lines)
@@ -172,10 +176,10 @@ class GPS:
                         #printGSV(lines)
                         pass
                     elif lines[0] == "GPGLL":
-                        printGLL(lines)
+                        #self.printGLL(lines)
                         pass
                     elif lines[0] == "GPVTG":
-                        printVTG(lines)
+                        #self.printVTG(lines)
                         pass
                     else:
                         print("\n\nUnknown type:", lines[0], "\n\n")
@@ -192,3 +196,12 @@ class GPS:
         self.thread.stopped = True
         return
 
+gps = GPS()
+
+gps.startAsync()
+
+
+while True:
+    time.sleep(5)
+    print(gps.lat)
+    print(gps.lng)
