@@ -6,255 +6,16 @@ import json
 import re
 from pyrebase import pyrebase
 
-
-
 config = {"apiKey": "AIzaSyA20qu9ddnRJPAQgGpn9ySQLuqjLH2WWPI",
               "authDomain": "firefightingmonitoringsystem.firebaseapp.com",
               "databaseURL": "https://firefightingmonitoringsystem.firebaseio.com/",
               "storageBucket": "firefightingmonitoringsystem.appspot.com"
              }
 fireBase = pyrebase.initialize_app(config)
+db = fireBase.database() 
+db.remove() #removes previous data
 
-database = {
-  "piData": {
-    "users": {
-      "user1": {
-        "userProfile": {
-          "name": "Yuji Jeong",
-          "group": 10,
-          "age": 23,
-          "firefighterCode": "FEkdjs-23"
-        },
-        "status": {
-          "totalMissionCount": 23,
-          "currentMission": {
-            "ongoingMission": True,
-            "ongoingMissionNumber": 23
-          }
-        },
-        "missionData": {
-          "missionNumber": 23,
-          "data": {
-            "time0": {
-              "timestamp": "random time sttamp",
-              "userData": {
-                "heartRate": 99,
-                "bodyTemperature": 37.4,
-                "externalTemperature": 40.0
-              }
-            },
-            "time1": {
-              "timestamp": "time stamp +5 seconds",
-              "userData": {
-                "heartRate": 100,
-                "bodyTemperature": 37.0,
-                "externalTemperature": 42.0
-              }
-            },
-            "time2": {
-              "timestamp": "time stamp +5 seconds",
-              "userData": {
-                "heartRate": 100,
-                "bodyTemperature": 37.0,
-                "externalTemperature": 42.0
-              }
-            }
-          }
-        }
-      },
-      "user2": {
-        "userProfile": {
-          "name": "Yuhan Lee",
-          "group": 10,
-          "age": 23,
-          "firefighterCode": "FEkdjs-24"
-        },
-        "status": {
-          "totalMissionCount": 12,
-          "currentMission": {
-            "ongoingMission": True,
-            "ongoingMissionNumber": 23
-          }
-        },
-        "missionData": {
-          "ongoingMission": {
-            "missionNumber": 23,
-            "data": {
-              "time0": {
-                "timestamp": "random time sttamp",
-                "userData": {
-                  "heartRate": 99,
-                  "bodyTemperature": 37.4,
-                  "externalTemperature": 40.0
-                }
-              },
-              "time1": {
-                "timestamp": "time stamp +5 seconds",
-                "userData": {
-                  "heartRate": 100,
-                  "bodyTemperature": 37.0,
-                  "externalTemperature": 42.0
-                }
-              },
-              "time2": {
-                "timestamp": "time stamp +5 seconds",
-                "userData": {
-                  "heartRate": 100,
-                  "bodyTemperature": 37.0,
-                  "externalTemperature": 42.0
-                }
-              }
-            }
-          }
-        }
-      },
-      "user3": {
-        "userProfile": {
-          "name": "Studio Ghibli",
-          "group": 10,
-          "age": 23,
-          "firefighterCode": "FEkdjs-25"
-        },
-        "status": {
-          "totalMissionCount": 23,
-          "currentMission": {
-            "ongoingMission": True,
-            "ongoingMissionNumber": 23
-          }
-        },
-        "missionData": {
-          "ongoingMission": {
-            "missionNumber": 23,
-            "data": {
-              "time0": {
-                "timestamp": "random time sttamp",
-                "userData": {
-                  "heartRate": 99,
-                  "bodyTemperature": 37.4,
-                  "externalTemperature": 40.0
-                }
-              },
-              "time1": {
-                "timestamp": "time stamp +5 seconds",
-                "userData": {
-                  "heartRate": 100,
-                  "bodyTemperature": 37.0,
-                  "externalTemperature": 42.0
-                }
-              },
-              "time2": {
-                "timestamp": "time stamp +5 seconds",
-                "userData": {
-                  "heartRate": 100,
-                  "bodyTemperature": 37.0,
-                  "externalTemperature": 42.0
-                }
-              }
-            }
-          }
-        }
-      },
-      "user4": {
-        "userProfile": {
-          "name": "Ponyo Kiki",
-          "group": 10,
-          "age": 23,
-          "firefighterCode": "FEkdjs-26"
-        },
-        "status": {
-          "totalMissionCount": 80,
-          "currentMission": {
-            "ongoingMission": True,
-            "ongoingMissionNumber": 23
-          }
-        },
-        "missionData": {
-          "ongoingMission": {
-            "missionNumber": 23,
-            "data": {
-              "time0": {
-                "timestamp": "random time sttamp",
-                "userData": {
-                  "heartRate": 99,
-                  "bodyTemperature": 37.4,
-                  "externalTemperature": 40.0
-                }
-              },
-              "time1": {
-                "timestamp": "time stamp +5 seconds",
-                "userData": {
-                  "heartRate": 100,
-                  "bodyTemperature": 37.0,
-                  "externalTemperature": 42.0
-                }
-              },
-              "time2": {
-                "timestamp": "time stamp +5 seconds",
-                "userData": {
-                  "heartRate": 100,
-                  "bodyTemperature": 37.0,
-                  "externalTemperature": 42.0
-                }
-              }
-            }
-          }
-        }
-      },
-      "user5": {
-        "userProfile": {
-          "name": "Eric Laroche",
-          "group": 10,
-          "age": 23,
-          "firefighterCode": "FEkdjs-27"
-        },
-        "status": {
-          "totalMissionCount": 3,
-          "currentMission": {
-            "ongoingMission": True,
-            "ongoingMissionNumber": 23
-          }
-        },
-        "missionData": {
-          "ongoingMission": {
-            "missionNumber": 23,
-            "data": {
-              "time0": {
-                "timestamp": "random time sttamp",
-                "userData": {
-                  "heartRate": 99,
-                  "bodyTemperature": 37.4,
-                  "externalTemperature": 40.0
-                }
-              },
-              "time1": {
-                "timestamp": "time stamp +5 seconds",
-                "userData": {
-                  "heartRate": 100,
-                  "bodyTemperature": 37.0,
-                  "externalTemperature": 42.0
-                }
-              },
-              "time2": {
-                "timestamp": "time stamp +5 seconds",
-                "userData": {
-                  "heartRate": 100,
-                  "bodyTemperature": 37.0,
-                  "externalTemperature": 42.0
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-db = fireBase.database()
-#db.set(database)
-
-
-
+# usrs = ["usr0", "usr1", "usr2", "usr3"]
 while True:
     hum1 = random.randint(30,40)
     hum2 = random.randint(30,40)
@@ -276,41 +37,72 @@ while True:
     hartbt3 = random.randint(70,100)
     hartbt4 = random.randint(70,100)
 
+    gpsN1 = round(random.uniform(45.419340,45.419349),6)
+    gpsW1 = round(random.uniform(75.678930,75.678939),6)
+    gpsN2 = round(random.uniform(45.419340,45.419349),6)
+    gpsW2 = round(random.uniform(75.678930,75.678939),6)
+    gpsN3 = round(random.uniform(45.419340,45.419349),6)
+    gpsW3 = round(random.uniform(75.678930,75.678939),6)
+    gpsN4 = round(random.uniform(45.419340,45.419349),6)
+    gpsW4 = round(random.uniform(75.678930,75.678939),6)
 
-    dt = str(datetime.datetime.now().date()) + "_" + str(datetime.datetime.now().time().isoformat())
-    dt = re.sub("\.", "_", dt)
-    print ("Time pushed: " + dt)
 
-    data = {
-        "users":{
-            "arsham":{
-                "chestTemperature": chestTemp1,
-                "externalTemperature": extTemp1,
-                "humidity": hum1,
-                "heartbeat": hartbt1,
-                },
-            "filip":{
-                "chestTemperature": chestTemp2,
-                "externalTemperature": extTemp2,
-                "humidity": hum2,
-                "heartbeat": hartbt2,
-                },
-            "franko":{
-                "chestTemperature": chestTemp3,
-                "externalTemperature": extTemp3,
-                "humidity": hum3,
-                "heartbeat": hartbt3,
-                },
-            "yuhan":{
-                "chestTemperature": chestTemp4,
-                "externalTemperature": extTemp4,
-                "humidity": hum4,
-                "heartbeat": hartbt4,
-                },
-            }
+    timestamp = datetime.datetime.now().time().isoformat()
+    dtD = str(datetime.datetime.now().date()) + "_" + str(datetime.datetime.now().time().isoformat())
+    dtD = re.sub("\.", "_", dtD)
+    timestamp = re.sub("\.", "_", timestamp)
+    timestamp = re.sub("_.*", "", timestamp)
+    print ("Time pushed: " + dtD)
+
+    data1 = {
+            dtD:{
+                "chestTemperature":chestTemp1,
+                "externalTemperature":extTemp1,
+                "heartRate":hartbt1,
+                "humidity":hum1,
+                "gpsN":gpsN1,
+                "gpsW":gpsW1,
+                "dateTime": timestamp,
+            },
+    }
+    data2 = {
+            dtD:{
+                "chestTemperature":chestTemp2,
+                "externalTemperature":extTemp2,
+                "heartRate":hartbt2,
+                "humidity":hum2,
+                "gpsN":gpsN2,
+                "gpsW":gpsW2,
+                "dateTime": timestamp,
+            },
+    }
+    data3 = {
+            dtD:{
+                "chestTemperature":chestTemp3,
+                "externalTemperature":extTemp3,
+                "heartRate":hartbt3,
+                "humidity":hum3,
+                "gpsN":gpsN3,
+                "gpsW":gpsW3,
+                "dateTime": timestamp,
+            },
+    }
+    data4 = {
+            dtD:{
+                "chestTemperature":chestTemp4,
+                "externalTemperature":extTemp4,
+                "heartRate":hartbt4,
+                "humidity":hum4,
+                "gpsN":gpsN4,
+                "gpsW":gpsW4,
+                "dateTime": timestamp,
+            },
     }
 
-    result = db.child("piData").child("users").child("user1").child("missionData").child(dt).set(data)
-    print("Res: " + str(result))
+    result1 = db.child("pi_data/users/usr1").update(data1)
+    result2 = db.child("pi_data/users/usr2").update(data2)
+    result3= db.child("pi_data/users/usr3").update(data3)
+    result4 = db.child("pi_data/users/usr4").update(data4)
+    print("Res:\n{}\n{}\n{}\n{}\n".format(str(result1),str(result2),str(result3),str(result4)))
 
-    time.sleep(1)
+    time.sleep(5) #5 second works?
