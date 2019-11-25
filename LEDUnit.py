@@ -14,16 +14,23 @@ class LEDController:
         
         
     def mainLightThread(self):
-        while True:
+        while not self.thread.stopped:
             while self.tempo == 0:
-                time.sleep(1)
+                time.sleep(5)
             sleepTime = 60 / self.tempo 
             
             time.sleep(sleepTime)
+            
             self.sensehat.clear(255,255,255)
             time.sleep(0.1)
-            self.sensehat.clear(255,0,0)
-        
+            if self.tempo > 40 and self.tempo < 180:
+                if self.tempo > 50 and self.tempo < 150:
+                    self.sensehat.clear(0,255,0)
+                else:
+                    self.sensehat.clear(0,255,255)
+            else:
+                self.sensehat.clear(255,0,0)
+                
     def startDisplayThread(self):
         self.thread = threading.Thread(target=self.mainLightThread)
         self.thread.stopped = False

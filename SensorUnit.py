@@ -30,32 +30,97 @@ class BasicSensorInformation:
         self.endtime = endTime
         
     
-def main():
-    
-    #Mock Humidity data
+def generateRandomData():
+    hum1 = random.randint(30,40)
     hum2 = random.randint(30,40)
     hum3 = random.randint(30,40)
     hum4 = random.randint(30,40)
-    
-    #Mock Chest Temp data
+
+    chestTemp1 = random.randint(40,50)
     chestTemp2 = random.randint(40,50)
     chestTemp3 = random.randint(40,50)
     chestTemp4 = random.randint(40,50)
-    
-    #Mock External Temp data
+
+    extTemp1 = random.randint(100,120)
     extTemp2 = random.randint(100,120)
     extTemp3 = random.randint(100,120)
     extTemp4 = random.randint(100,120)
 
-    #Mock Heartbeat data
+    hartbt1 = random.randint(70,100)
     hartbt2 = random.randint(70,100)
     hartbt3 = random.randint(70,100)
-    hartbt4 = random.randint(70,100)    
+    hartbt4 = random.randint(70,100)
+
+    gpsN1 = round(random.uniform(45.0,45.9),6)
+    gpsW1 = round(random.uniform(75.0,75.9),6)
+    gpsN2 = round(random.uniform(45.0,45.9),6)
+    gpsW2 = round(random.uniform(75.0,75.9),6)
+    gpsN3 = round(random.uniform(45.0,45.9),6)
+    gpsW3 = round(random.uniform(75.0,75.9),6)
+    gpsN4 = round(random.uniform(45.0,45.9),6)
+    gpsW4 = round(random.uniform(75.0,75.9),6)
+
+
+    timestamp = datetime.datetime.now().time().isoformat()
+    dtD = str(datetime.datetime.now().date()) + "_" + str(datetime.datetime.now().time().isoformat())
+    dtD = re.sub("\.", "_", dtD)
+    timestamp = re.sub("\.", "_", timestamp)
+    timestamp = re.sub("_.*", "", timestamp)
+    print ("Time pushed: " + dtD)
+
+    data1 = {
+            dtD:{
+                "chestTemperature":chestTemp1,
+                "externalTemperature":extTemp1,
+                "heartRate":hartbt1,
+                "humidity":hum1,
+                "gpsN":gpsN1,
+                "gpsW":gpsW1,
+                "dateTime": timestamp,
+            },
+    }
+    data2 = {
+            dtD:{
+                "chestTemperature":chestTemp2,
+                "externalTemperature":extTemp2,
+                "heartRate":hartbt2,
+                "humidity":hum2,
+                "gpsN":gpsN2,
+                "gpsW":gpsW2,
+                "dateTime": timestamp,
+            },
+    }
+    data3 = {
+            dtD:{
+                "chestTemperature":chestTemp3,
+                "externalTemperature":extTemp3,
+                "heartRate":hartbt3,
+                "humidity":hum3,
+                "gpsN":gpsN3,
+                "gpsW":gpsW3,
+                "dateTime": timestamp,
+            },
+    }
+    data4 = {
+            dtD:{
+                "chestTemperature":chestTemp4,
+                "externalTemperature":extTemp4,
+                "heartRate":hartbt4,
+                "humidity":hum4,
+                "gpsN":gpsN4,
+                "gpsW":gpsW4,
+                "dateTime": timestamp,
+            },
+    }
+    return data2,data3,data4, dtD
     
+def main():
+    
+
     heartsensor = HeartRateSensor()
     heartsensor.startAsyncBPM()
     orientationsensor = OrientationSensor()
-    orientationsensor.startAsyncOrientation()
+    #orientationsensor.startAsyncOrientation()
     led = LEDController()
     led.startDisplayThread()
     tempsens = TemperatureSensor()
@@ -69,81 +134,14 @@ def main():
              }
     fireBase = pyrebase.initialize_app(config)
     
-    #Users(filip, franko, yuhan) are mock
-    
-    db = fireBase.database()
-    dt = str(datetime.datetime.now().date()) + "_" + str(datetime.datetime.now().time().isoformat())
-    dt = re.sub("\.", "_", dt)
-    print ("Time pushed: " + dt)
-    data = {
-        "users":{
-            "arsham":{
-                "chestTemperature": tempsens.getTemp(),
-                "externalTemperature": orientationsensor.sensehat.get_temperature(),
-                "pressure": orientationsensor.sensehat.get_pressure(),
-                "heartbeat": heartsensor.BPM,
-                },
-            "filip":{
-                "chestTemperature": chestTemp2,
-                "externalTemperature": extTemp2,
-                "humidity": hum2,
-                "heartbeat": hartbt2,
-                },
-            "franko":{
-                "chestTemperature": chestTemp3,
-                "externalTemperature": extTemp3,
-                "humidity": hum3,
-                "heartbeat": hartbt3,
-                },
-            "yuhan":{
-                "chestTemperature": chestTemp4,
-                "externalTemperature": extTemp4,
-                "humidity": hum4,
-                "heartbeat": hartbt4,
-                },
-            }
-    }
-    
-    db = fireBase.database()
-    
-    '''result = db.child("pi_data").child(dt).set(data)''' 
+
     
     while True:
         #Users(filip, franko, yuhan) are mock
+        data2,data3,data4, dt = generateRandomData()
         
         db = fireBase.database()
-        dt = str(datetime.datetime.now().date()) + "_" + str(datetime.datetime.now().time().isoformat())
-        dt = re.sub("\.", "_", dt)
-        print ("Time pushed: " + dt)
-        # data = {
-        #     "users":{
-        #         "arsham":{
-        #             "chestTemperature": tempsens.getTemp(),
-        #             "externalTemperature": orientationsensor.sensehat.get_temperature(),
-        #             "pressure": orientationsensor.sensehat.get_pressure(),
-        #             "heartbeat": heartsensor.BPM,
-        #             },
-        #         "filip":{
-        #             "chestTemperature": chestTemp2,
-        #             "externalTemperature": extTemp2,
-        #             "humidity": hum2,
-        #             "heartbeat": hartbt2,
-        #             },
-        #         "franko":{
-        #             "chestTemperature": chestTemp3,
-        #             "externalTemperature": extTemp3,
-        #             "humidity": hum3,
-        #             "heartbeat": hartbt3,
-        #             },
-        #         "yuhan":{
-        #             "chestTemperature": chestTemp4,
-        #             "externalTemperature": extTemp4,
-        #             "humidity": hum4,
-        #             "heartbeat": hartbt4,
-        #             },
-        #         }
-        # }
-
+        
         data1 = {
                 dt:{
                     "chestTemperature":tempsens.getTemp(),
@@ -152,31 +150,9 @@ def main():
                     "humidity":orientationsensor.sensehat.get_pressure(),
                 },
         }
-        data2 = {
-                dt:{
-                    "chestTemperature":chestTemp2,
-                    "externalTemperature":extTemp2,
-                    "heartRate":hartbt2,
-                    "humidity":hum2,
-                },
-        }
-        data3 = {
-                dt:{
-                    "chestTemperature":chestTemp3,
-                    "externalTemperature":extTemp3,
-                    "heartRate":hartbt3,
-                    "humidity":hum3,
-                },
-        }
-        data4 = {
-                dt:{
-                    "chestTemperature":chestTemp4,
-                    "externalTemperature":extTemp4,
-                    "heartRate":hartbt4,
-                    "humidity":hum4,
-                },
-        }
+
         led.tempo = heartsensor.BPM
+        print(led.tempo)
         # result = db.child("pi_data").child(dt).set(data)
         result = db.child("pi_data/users/usr1").update(data1)
         result = db.child("pi_data/users/usr2").update(data2)
@@ -185,7 +161,7 @@ def main():
 
         time.sleep(5) #Try 5 seconds
 
-        print("res: " + result)
+        
 
 if __name__ == "__main__":
     main()

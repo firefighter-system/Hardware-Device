@@ -106,7 +106,7 @@ class OrientationSensor:
         
         gCoeff=self.calculateGCoeff()
         flag = True
-        while flag:
+        while not self.thread.stopped:
             starttime = time.time()
             
             '''get raw data'''

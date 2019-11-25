@@ -18,7 +18,9 @@ class TemperatureSensor:
         
         while not self.thread.stopped:
             self.humidity, self.temp = Adafruit_DHT.read_retry(11, 4)
-            
+            time.sleep(10)
+        
+        
         return
 
     def getTemp(self):

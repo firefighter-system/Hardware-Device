@@ -12,7 +12,7 @@ class HeartRateSensor:
         self.i2c = busio.I2C(board.SCL, board.SDA)
         
         self.ads = ADS.ADS1015(self.i2c)
-        self.ads.gain = 2/3
+        self.ads.gain = 1
         self.ads.data_rate = 490
         self.chan = AnalogIn(self.ads, ADS.P0)
         
@@ -25,24 +25,22 @@ class HeartRateSensor:
         rate = [0] * 10         # array to hold last 10 IBI values
         sampleCounter = 0       # used to determine pulse timing
         lastBeatTime = 0        # used to find IBI
-        P = 512                 # used to find peak in pulse wave, seeded
-        T = 512                 # used to find trough in pulse wave, seeded
-        thresh = 512            # used to find instant moment of heart beat, seeded
+        P = Signal = 500                # used to find peak in pulse wave, seeded
+        T = Signal = 500                 # used to find trough in pulse wave, seeded
+        thresh = Signal = 505            # used to find instant moment of heart beat, seeded
         amp = 100               # used to hold amplitude of pulse waveform, seeded
         firstBeat = True        # used to seed rate array so we startup with reasonable BPM
         secondBeat = False      # used to seed rate array so we startup with reasonable BPM
 
-        IBI = 100               # int that holds the time interval between beats! Must be seeded!
+        IBI = 300               # int that holds the time interval between beats! Must be seeded!
         Pulse = False           # "True" when User's live heartbeat is detected. "False" when not a "live beat". 
         lastTime = int(time.time()*1000)
         
-        while True:
-            
-            
-            Signal = self.chan.value
-      
+        while not self.thread.stopped:
+
+            Signal = 10* self.chan.value
             currentTime = int(time.time()*1000)
-            
+
             sampleCounter += currentTime - lastTime
             lastTime = currentTime
             N = sampleCounter - lastBeatTime
@@ -59,8 +57,7 @@ class HeartRateSensor:
             if N > 250:
                 # avoid high frequency noise
                 if Signal > thresh and Pulse == False and N > (IBI/5.0)*3:       
-                    
-                    
+
                     Pulse = True                        # set the Pulse flag when we think there is a pulse
                     IBI = sampleCounter - lastBeatTime  # measure time between beats in mS
                     lastBeatTime = sampleCounter        # keep track of time for next pulse
@@ -92,17 +89,20 @@ class HeartRateSensor:
                 P = thresh                              # reset these for next time
                 T = thresh
 
-            if N > 2500:                                # if 2.5 seconds go by without a beat
-                thresh = 512                            # set thresh default
-                P = 512                                 # set P default
-                T = 512                                 # set T default
+            if N > 2500:
+
+                # if 2.5 seconds go by without a beat
+                thresh = Signal+5                          # set thresh default
+                P = Signal                                # set P default
+                T = Signal
+                IBI = 300# set T default
                 lastBeatTime = sampleCounter            # bring the lastBeatTime up to date        
                 firstBeat = True                        # set these to avoid noise
                 secondBeat = False                      # when we get the heartbeat back
                 self.BPM = 0
 
-            time.sleep(0.05)
-
+            time.sleep(0.1)
+#
     def startAsyncBPM(self):
         self.thread = threading.Thread(target=self.getBPMLoop)
         self.thread.stopped = False
@@ -110,7 +110,7 @@ class HeartRateSensor:
         return
     
     def stopAsyncBPM(self):
-        self.thread.stopped = true
+        self.thread.stopped = True
         self.BPM=0
         return
 
