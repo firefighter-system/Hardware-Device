@@ -1,4 +1,3 @@
-from sense_hat import SenseHat
 
 import time
 import math
@@ -131,7 +130,7 @@ def main():
 
     try:
         orientationsensor = OrientationSensor()
-        #orientationsensor.startAsyncOrientation()
+        orientationsensor.startAsyncOrientation()
     except:
         print("Sense Hat failure")
     try:
