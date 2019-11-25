@@ -13,6 +13,7 @@ from HeartRate import HeartRateSensor
 from OrientationUnit import OrientationSensor
 from LEDUnit import LEDController
 from Temperature import TemperatureSensor
+from gpsSensor import GPS
 
 
 class BasicSensorInformation:
@@ -112,20 +113,38 @@ def generateRandomData():
                 "dateTime": timestamp,
             },
     }
-    return data2,data3,data4, dtD
+    return data2,data3,data4, dtD, timestamp
     
 def main():
     
 
-    heartsensor = HeartRateSensor()
-    heartsensor.startAsyncBPM()
-    orientationsensor = OrientationSensor()
-    #orientationsensor.startAsyncOrientation()
-    led = LEDController()
-    led.startDisplayThread()
-    tempsens = TemperatureSensor()
-    tempsens.startAsyncTempLoop()
-    
+    try :
+        heartsensor = HeartRateSensor()
+        heartsensor.startAsyncBPM()
+    except:
+        print("heart sensor failure")
+    try :
+        gps = GPS()
+        gps.startAsync()
+    except: 
+        print("GPS sensor failure")
+
+    try:
+        orientationsensor = OrientationSensor()
+        #orientationsensor.startAsyncOrientation()
+    except:
+        print("Sense Hat failure")
+    try:
+        led = LEDController()
+        led.startDisplayThread()
+    except:
+        print("LED controller service crash")
+    try:
+        tempsens = TemperatureSensor()
+        tempsens.startAsyncTempLoop()
+    except:
+        print("internal temperature sensor failure")
+
     '''start firebase'''
     config = {"apiKey": "AIzaSyA20qu9ddnRJPAQgGpn9ySQLuqjLH2WWPI",
               "authDomain": "firefightingmonitoringsystem.firebaseapp.com",
@@ -135,12 +154,10 @@ def main():
     fireBase = pyrebase.initialize_app(config)
     
 
-    
+    db = fireBase.database()
     while True:
         #Users(filip, franko, yuhan) are mock
-        data2,data3,data4, dt = generateRandomData()
-        
-        db = fireBase.database()
+        data2, data3, data4, dt, timestamp = generateRandomData()
         
         data1 = {
                 dt:{
@@ -148,11 +165,13 @@ def main():
                     "externalTemperature":orientationsensor.sensehat.get_temperature(),
                     "heartRate":heartsensor.BPM,
                     "humidity":orientationsensor.sensehat.get_pressure(),
+                    "gpsN":gps.lat,
+                    "gpsW":gps.lng,
+                    "dateTime": timestamp
                 },
         }
 
         led.tempo = heartsensor.BPM
-        print(led.tempo)
         # result = db.child("pi_data").child(dt).set(data)
         result = db.child("pi_data/users/usr1").update(data1)
         result = db.child("pi_data/users/usr2").update(data2)

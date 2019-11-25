@@ -160,6 +160,7 @@ class GPS:
         # Change directory to usb port
         try:
             while not self.thread.stopped:
+                time.sleep(20)
                 line = self.readString()
                 lines = line.split(",")
                 if self.checksum(line):
@@ -195,13 +196,3 @@ class GPS:
     def stopAsync(self):
         self.thread.stopped = True
         return
-
-gps = GPS()
-
-gps.startAsync()
-
-
-while True:
-    time.sleep(5)
-    print(gps.lat)
-    print(gps.lng)
