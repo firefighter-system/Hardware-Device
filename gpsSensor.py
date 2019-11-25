@@ -29,6 +29,7 @@ def getLatLng(latString, lngString):
 def printRMC(lines):
     print("========================================RMC========================================")
     # print(lines, '\n')
+    print("printing:" + str(lines[9]))
     print("Fix taken at:", getTime(lines[1] + lines[9], "%H%M%S.%f%d%m%y", "%a %b %d %H:%M:%S %Y"), "UTC")
     print("Status (A=OK,V=KO):", lines[2])
     latlng = getLatLng(lines[3], lines[5])
@@ -146,7 +147,7 @@ def checksum(line):
 
 if __name__ == '__main__':
     # Change directory to usb port
-    ser = serial.Serial('/dev/tty.usbmodem14201', 9600, timeout=1)  # Open Serial port
+    ser = serial.Serial('/dev/cu.usbmodem14201', 9600, timeout=1)  # Open Serial port
     try:
         while True:
             line = readString()
@@ -156,7 +157,7 @@ if __name__ == '__main__':
                     printRMC(lines)
                     pass
                 elif lines[0] == "GPGGA":
-                    printGGA(lines)
+                    #printGGA(lines)
                     pass
                 elif lines[0] == "GPGSA":
                    # printGSA(lines)
@@ -165,10 +166,10 @@ if __name__ == '__main__':
                     #printGSV(lines)
                     pass
                 elif lines[0] == "GPGLL":
-                    printGLL(lines)
+                    #printGLL(lines)
                     pass
                 elif lines[0] == "GPVTG":
-                    printVTG(lines)
+                    #printVTG(lines)
                     pass
                 else:
                     print("\n\nUnknown type:", lines[0], "\n\n")
