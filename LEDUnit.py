@@ -6,20 +6,24 @@ import math
 import threading
 
 class LEDController:
-    def __init__(self):
+    def __init__(self, heartratesensor):
         self.sensehat = SenseHat()
         self.X = [255, 0, 0]  # Red
         self.O = [255, 255, 255]  # White
-        self.tempo = 60
+        self.tempo = 0
+        self.heartsensor = heartratesensor
         
         
     def mainLightThread(self):
         while not self.thread.stopped:
+            self.tempo = self.heartsensor.BPM
             while self.tempo == 0:
+                self.sensehat.clear(self.X)
                 time.sleep(5)
+                self.tempo = self.heartsensor.BPM
             sleepTime = 60 / self.tempo 
             
-            time.sleep(sleepTime)
+            time.sleep(sleepTime - 0.1)
             
             self.sensehat.clear(255,255,255)
             time.sleep(0.1)

@@ -183,7 +183,8 @@ class GPS:
                         #self.printVTG(lines)
                         pass
                     else:
-                        print("\n\nUnknown type:", lines[0], "\n\n")
+#                        print("\n\nUnknown type:", lines[0], "\n\n")
+                        print("gps fail")
         except KeyboardInterrupt:
             print('Exiting Script')
             

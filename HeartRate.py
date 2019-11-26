@@ -101,7 +101,7 @@ class HeartRateSensor:
                 secondBeat = False                      # when we get the heartbeat back
                 self.BPM = 0
 
-            time.sleep(0.1)
+            time.sleep(0.3)
 #
     def startAsyncBPM(self):
         self.thread = threading.Thread(target=self.getBPMLoop)

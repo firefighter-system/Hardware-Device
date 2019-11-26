@@ -66,7 +66,7 @@ def generateRandomData():
     dtD = re.sub("\.", "_", dtD)
     timestamp = re.sub("\.", "_", timestamp)
     timestamp = re.sub("_.*", "", timestamp)
-    print ("Time pushed: " + dtD)
+    
 
     data1 = {
             dtD:{
@@ -130,11 +130,11 @@ def main():
 
     try:
         orientationsensor = OrientationSensor()
-        orientationsensor.startAsyncOrientation()
+#        orientationsensor.startAsyncOrientation()
     except:
         print("Sense Hat failure")
     try:
-        led = LEDController()
+        led = LEDController(heartsensor)
         led.startDisplayThread()
     except:
         print("LED controller service crash")
@@ -152,8 +152,9 @@ def main():
              }
     fireBase = pyrebase.initialize_app(config)
     
-
+    
     db = fireBase.database()
+    #db.remove() #removes previous data
     while True:
         #Users(filip, franko, yuhan) are mock
         data2, data3, data4, dt, timestamp = generateRandomData()
@@ -169,15 +170,20 @@ def main():
                     "dateTime": timestamp
                 },
         }
+        
 
-        led.tempo = heartsensor.BPM
-        # result = db.child("pi_data").child(dt).set(data)
+        
+#        result = db.child("pi_data").child(dt).set(data)
+        
         result = db.child("pi_data/users/usr1").update(data1)
+        
         result = db.child("pi_data/users/usr2").update(data2)
         result = db.child("pi_data/users/usr3").update(data3)
         result = db.child("pi_data/users/usr4").update(data4)
+        print ("Time pushed: " + dt)
+        time.sleep(1)
 
-        time.sleep(5) #Try 5 seconds
+ #Try 5 seconds
 
         
 
