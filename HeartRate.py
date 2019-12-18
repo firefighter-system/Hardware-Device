@@ -13,7 +13,7 @@ class HeartRateSensor:
         
         self.ads = ADS.ADS1015(self.i2c)
         self.ads.gain = 1
-        self.ads.data_rate = 490
+        self.ads.data_rate = 128
         self.chan = AnalogIn(self.ads, ADS.P0)
         
         self.BPM = 0
